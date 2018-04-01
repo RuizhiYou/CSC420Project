@@ -1,0 +1,3 @@
+export PATH=$HOME/bin:/usr/local/bin:/Users/chongyang/anaconda3/bin:PATH
+PATH=/bin:/sbin/:/usr/bin/
+export PATH
