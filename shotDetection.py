@@ -24,7 +24,13 @@ def findCutScene(files):
         else:
             cur = calculateHistogram(os.path.join('./clip', filename))
             diff = np.linalg.norm(cur - prev)
-            if (diff - prevDiff) > THRESHOLD * prevDiff: cuts.append(i)
+            if (diff - prevDiff) > THRESHOLD * prevDiff:
+                cuts.append(i)
+                print("BINGO")
+
+            print(filename)
+            print(diff)
+
             prev = cur
             prevDiff = diff
 
@@ -32,8 +38,7 @@ def findCutScene(files):
 
 directory = os.fsencode("./clip")
 files = os.listdir(directory)
-files = [os.fsdecode(file) for file in files]
+files = [os.fsdecode(file) for file in files if os.fsdecode(file).split(".")[-1] == "jpg"]
 files = sorted(files, key=lambda x: (x.split('.')[0]))
 cuts = findCutScene(files)
 print(cuts)
-
