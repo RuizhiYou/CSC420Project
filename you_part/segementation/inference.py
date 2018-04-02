@@ -65,6 +65,7 @@ def main():
     print ("model loaded successfully")
     print ("the type of the model: {}".format(type(model)))
 
+    preds = model.forward(sess)
 
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
