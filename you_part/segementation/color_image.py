@@ -21,6 +21,9 @@ def color_image(source_img_path, boundary_img_path, saved_path, saved_name):
         print ("shape are different! Skip this pair!")
 
 def color_images(source_folder, boundary_folder, saved_path):
+    print (source_folder)
+    print (boundary_folder)
+    print (saved_path)
     source_images = os.listdir(source_folder)
     boundary_images = os.listdir(boundary_folder)
 
@@ -35,6 +38,6 @@ def color_images(source_folder, boundary_folder, saved_path):
 
 
 
-if __name__ == '__main__':
-    # color_image('./test_images/0016.jpg', './test_out/pspnet_0016.jpg', './final_images/', '1')
-    color_images('./test_images/', './test_out/', './final_images/')
+# if __name__ == '__main__':
+#     # color_image('./test_images/0016.jpg', './test_out/pspnet_0016.jpg', './final_images/', '1')
+#     color_images('./test_images/', './test_out/', './final_images/')

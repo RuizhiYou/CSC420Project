@@ -8,8 +8,11 @@ from PIL import Image
 import tensorflow as tf
 import numpy as np
 from scipy import misc
-
+import shutil
 from model import FCN8s, PSPNet50, ENet, ICNet
+from color_image import *
+from image_combined import *
+
 
 save_dir = './output/'
 model_path = {'pspnet': './model/pspnet50.npy',
@@ -17,6 +20,8 @@ model_path = {'pspnet': './model/pspnet50.npy',
               'enet': './model/cityscapes/enet.ckpt',
               'icnet': './model/cityscapes/icnet.npy'}
 # python3 inference.py --img-path '1.jpg' --model 'fcn'
+colored_img_folder = './colored_img/'
+saved_vedio = './saved_video/video.mp4'
 
 def get_arguments():
     parser = argparse.ArgumentParser(description="Reproduced PSPNet")
@@ -65,7 +70,14 @@ def segmentation(images, output, modelName):
         preds = model.forward(sess)
         p = output + modelName + '_' + model.img_name, preds[0]
         misc.imsave(os.path.join(output + (modelName + '_' + model.img_name)), preds[0])
-    
+
+def generate_vedio(colored_img_folder, saved_vedio):
+    if os.path.exists(colored_img_folder):
+        shutil.rmtree(colored_img_folder)
+    os.makedirs(colored_img_folder)
+    color_images(args.img_path, args.save_dir, colored_img_folder)
+    # combine_images(colored_img_folder, saved_vedio)
+
 if __name__ == '__main__':
     args = get_arguments()
     folder = args.img_path
@@ -74,3 +86,4 @@ if __name__ == '__main__':
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
     segmentation(images, args.save_dir, args.model)
+    generate_vedio(colored_img_folder, saved_vedio)

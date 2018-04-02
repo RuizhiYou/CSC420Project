@@ -6,18 +6,18 @@ SPEED = 10
 
 def combine_images(image_folder, saved_vedio):
     images = os.listdir(image_folder)
-    saved_video_path = './saved_video/video.mp4'
+    print ("image_folder: {}".format(image_folder))
     if '.DS_Store' in images:
         images.remove('.DS_Store')
     print (images)
     img = cv2.imread(image_folder + images[0])
     height , width , layers =  img.shape
 
-    if os.path.exists(saved_video_path):
+    if os.path.exists(saved_vedio):
         print ("remove the orignal saved file")
-        os.remove(saved_video_path)
+        os.remove(saved_vedio)
 
-    video = cv2.VideoWriter(saved_video_path,-1,SPEED,(width,height))
+    video = cv2.VideoWriter(saved_vedio,-1,SPEED,(width,height))
 
     for i in range(len(images)):
         print ("processing image: {}...".format(images[i]))
