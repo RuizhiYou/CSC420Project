@@ -54,7 +54,7 @@ def segmentation(images, output, modelName):
     sess.run(init)
 
     print ("before model loaded")
-    model.load(model_path[args.model], sess)
+    model.load(model_path[modelName], sess)
     print ("model loaded successfully")
     print ("the type of the model: {}".format(type(model)))
 
