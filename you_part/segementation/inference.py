@@ -32,22 +32,15 @@ def get_arguments():
 
     return parser.parse_args()
 
-def main():
-    args = get_arguments()
+def segmentation(images, output, modelName):
 
-    folder = args.img_path
-    images = os.listdir(folder)
-
-    if '.DS_Store' in images:
-        images.remove('.DS_Store')
-
-    if args.model == 'pspnet':
+    if modelName == 'pspnet':
         model = PSPNet50()
-    elif args.model == 'fcn':
+    elif modelName == 'fcn':
         model = FCN8s()
-    elif args.model == 'enet':
+    elif modelName == 'enet':
         model = ENet()
-    elif args.model == 'icnet':
+    elif modelName == 'icnet':
         model = ICNet()
         
     # model.read_input(args.img_path)
@@ -66,15 +59,18 @@ def main():
     print ("the type of the model: {}".format(type(model)))
 
 
-    if not os.path.exists(args.save_dir):
-        os.makedirs(args.save_dir)
-
     for item in images:
         print ("processing image: {}...".format(item))
-        model.read_input(folder + item)
+        model.read_input(item)
         preds = model.forward(sess)
-        p = args.save_dir + args.model + '_' + model.img_name, preds[0]
-        misc.imsave(args.save_dir + args.model + '_' + model.img_name, preds[0])
+        p = output + modelName + '_' + model.img_name, preds[0]
+        misc.imsave(os.path.join(output + (modelName + '_' + model.img_name)), preds[0])
     
 if __name__ == '__main__':
-    main()
+    args = get_arguments()
+    folder = args.img_path
+    images = os.listdir(folder)
+    images = [os.path.join(folder, image) for image in images]
+    if not os.path.exists(args.save_dir):
+        os.makedirs(args.save_dir)
+    segmentation(images, args.save_dir, args.model)

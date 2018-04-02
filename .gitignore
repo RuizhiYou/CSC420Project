@@ -7,4 +7,8 @@ Model_zoo/*
 clip/
 *.npy
 ./you_part/segementation/output
-/segmentation/output
+./you_part/segmentation/input
+./you_part/segmentation/input/*
+you_part/segementation/output/
+you_part/segementation/input/
+you_part/segementation/input/*

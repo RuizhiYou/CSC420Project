@@ -18,7 +18,7 @@ def findCutScene(files):
     for i in range(len(files)):
         filename = files[i]
         if (i == 0):
-            image = os.path.join('./clip', filename)
+            image = filename
             prev = calculateHistogram(image)
             prevDiff = float('inf')
         else:
@@ -36,9 +36,11 @@ def findCutScene(files):
 
     return cuts
 
-directory = os.fsencode("./clip")
-files = os.listdir(directory)
-files = [os.fsdecode(file) for file in files if os.fsdecode(file).split(".")[-1] == "jpg"]
-files = sorted(files, key=lambda x: (x.split('.')[0]))
-cuts = findCutScene(files)
-print(cuts)
+if __name__ == '__main__':
+    directory = os.fsencode("./clip")
+    files = os.listdir(directory)
+    files = [os.fsdecode(file) for file in files if os.fsdecode(file).split(".")[-1] == "jpg"]
+    files = sorted(files, key=lambda x: (x.split('.')[0]))
+    files = [os.path.join('./clip', filename) for filename in files]
+    cuts = findCutScene(files)
+    print(cuts)
