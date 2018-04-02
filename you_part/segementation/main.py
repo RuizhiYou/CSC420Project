@@ -2,6 +2,7 @@ from inference import *
 from shotDetection import *
 import argparse
 
+
 save_dir = './output/'
 model_path = {'pspnet': './model/pspnet50.npy',
               'fcn': './model/fcn.npy',
@@ -20,20 +21,23 @@ def get_arguments():
                         help="pspnet or fcn",
                         choices=['pspnet', 'fcn', 'enet', 'icnet'],
                         required=True)
-
     return parser.parse_args()
 
-def main(images, output, modelName):
+def main(images, imageFiles, output, modelName):
 
-    segmentation(images, output, modelName)
-    #findCutScene(output)
+    cuts = findCutScene(imageFiles)
+    #segmentation(imageFiles, output, modelName)
+    outputFiles = [os.path.join(output, image) for image in images if image != ".DS_Store"]
+    plotCuts(cuts, outputFiles)
+
+
 
 if __name__ == '__main__':
     args = get_arguments()
     folder = args.img_path
     images = os.listdir(folder)
     images = sorted(images, key=lambda x: (x.split('.')[0]))
-    images = [os.path.join(folder, image) for image in images]
+    image_files = [os.path.join(folder, image) for image in images if image != ".DS_Store"]
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
-    main(images, args.save_dir, args.model)
+    main(images, image_files, args.save_dir, args.model)

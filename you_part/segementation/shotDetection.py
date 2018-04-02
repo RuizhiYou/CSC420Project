@@ -1,8 +1,11 @@
 import cv2
 import numpy as np
 import os
+from PIL import ImageFont
+from PIL import Image
+from PIL import ImageDraw
 
-THRESHOLD = 3
+THRESHOLD = 2
 def calculateHistogram(image):
     img = cv2.imread(image)
     color = ('b','g','r')
@@ -22,7 +25,7 @@ def findCutScene(files):
             prev = calculateHistogram(image)
             prevDiff = float('inf')
         else:
-            cur = calculateHistogram(os.path.join('./clip', filename))
+            cur = calculateHistogram(filename)
             diff = np.linalg.norm(cur - prev)
             if (diff - prevDiff) > THRESHOLD * prevDiff:
                 cuts.append(i)
@@ -35,6 +38,22 @@ def findCutScene(files):
             prevDiff = diff
 
     return cuts
+
+def plotCuts(cuts, files):
+    cut = 1
+    for i in range(len(files)):
+        if (i in cuts): cut += 1
+
+        imageFile = files[i]
+        im1 = Image.open(imageFile)
+        # Drawing the text on the picture
+        draw = ImageDraw.Draw(im1)
+        draw.text((0, 0), "Scene{}".format(cut), (255, 255, 0))
+        print(imageFile)
+        draw = ImageDraw.Draw(im1)
+
+        # Save the image with a new name
+        im1.save(imageFile)
 
 if __name__ == '__main__':
     directory = os.fsencode("./clip")
