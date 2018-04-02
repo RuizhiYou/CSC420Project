@@ -35,6 +35,12 @@ def get_arguments():
 def main():
     args = get_arguments()
 
+    folder = args.img_path
+    images = os.listdir(folder)
+
+    if '.DS_Store' in images:
+        images.remove('.DS_Store')
+
     if args.model == 'pspnet':
         model = PSPNet50()
     elif args.model == 'fcn':
@@ -44,10 +50,8 @@ def main():
     elif args.model == 'icnet':
         model = ICNet()
         
-    model.read_input(args.img_path)
-    print ("read successfully")
+    # model.read_input(args.img_path)
 
-    print ("saved dir: {}".format(args.save_dir))
     # Init tf Session
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
@@ -57,18 +61,20 @@ def main():
     sess.run(init)
 
     print ("before model loaded")
-    print ("model path: {}".format(model_path[args.model]))
     model.load(model_path[args.model], sess)
     print ("model loaded successfully")
     print ("the type of the model: {}".format(type(model)))
-    preds = model.forward(sess)
-      
+
+
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
 
-    p = args.save_dir + args.model + '_' + model.img_name, preds[0]
-    print ('path: {}'.format(p))
-    misc.imsave(args.save_dir + args.model + '_' + model.img_name, preds[0])
+    for item in images:
+        print ("processing image: {}...".format(item))
+        model.read_input(folder + item)
+        preds = model.forward(sess)
+        p = args.save_dir + args.model + '_' + model.img_name, preds[0]
+        misc.imsave(args.save_dir + args.model + '_' + model.img_name, preds[0])
     
 if __name__ == '__main__':
     main()
