@@ -5,3 +5,5 @@ Model_zoo/*
 *.pyc
 .DS_Store
 clip/
+*.npy
+./you_part/segementation/output
