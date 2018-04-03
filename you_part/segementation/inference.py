@@ -69,14 +69,14 @@ def segmentation(images, output, modelName):
         model.read_input(item)
         preds = model.forward(sess)
         p = output + modelName + '_' + model.img_name, preds[0]
-        misc.imsave(os.path.join(output + (modelName + '_' + model.img_name)), preds[0])
+        misc.imsave(os.path.join(output + (model.img_name)), preds[0])
 
-def generate_vedio(colored_img_folder, saved_vedio):
+def generate_vedio(colored_img_folder, saved_vedio, args):
     if os.path.exists(colored_img_folder):
         shutil.rmtree(colored_img_folder)
     os.makedirs(colored_img_folder)
     color_images(args.img_path, args.save_dir, colored_img_folder)
-    # combine_images(colored_img_folder, saved_vedio)
+    combine_images(colored_img_folder, saved_vedio)
 
 if __name__ == '__main__':
     args = get_arguments()
@@ -86,4 +86,4 @@ if __name__ == '__main__':
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
     segmentation(images, args.save_dir, args.model)
-    generate_vedio(colored_img_folder, saved_vedio)
+    generate_vedio(colored_img_folder, saved_vedio, args)

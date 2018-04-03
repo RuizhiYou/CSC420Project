@@ -1,7 +1,7 @@
 from inference import *
 from shotDetection import *
 import argparse
-
+import os
 
 save_dir = './output/'
 model_path = {'pspnet': './model/pspnet50.npy',
@@ -26,16 +26,17 @@ def get_arguments():
 def main(images, imageFiles, output, modelName):
 
     cuts = findCutScene(imageFiles)
-    #segmentation(imageFiles, output, modelName)
+    segmentation(imageFiles, output, modelName)
     outputFiles = [os.path.join(output, image) for image in images if image != ".DS_Store"]
     plotCuts(cuts, outputFiles)
-
+    generate_vedio('colored', 'test.mp4', args)
 
 
 if __name__ == '__main__':
     args = get_arguments()
     folder = args.img_path
     images = os.listdir(folder)
+    images = [image for image in images if image != ".DS_Store"]
     images = sorted(images, key=lambda x: (x.split('.')[0]))
     image_files = [os.path.join(folder, image) for image in images if image != ".DS_Store"]
     if not os.path.exists(args.save_dir):
