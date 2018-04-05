@@ -10,6 +10,7 @@ def combine_images(image_folder, saved_vedio):
     if '.DS_Store' in images:
         images.remove('.DS_Store')
     print (images)
+    images = sorted(images, key=lambda x: x)
     print(image_folder)
     print(images[0])
     img = cv2.imread(os.path.join(image_folder,images[0]))

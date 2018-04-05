@@ -8,8 +8,8 @@ from PIL import ImageDraw
 from scipy import misc
 
 THRESHOLD = 2
-DFD_THRESHOLD = 8
-DOWN_RATIO = 0.2
+DFD_THRESHOLD = 4
+DOWN_RATIO = 0.1
 
 def calculateHistogram(image):
     img = cv2.imread(image)
@@ -34,7 +34,6 @@ def dfd(previous, current, flow=None):
 
     for x, y in itertools.product(range(width), range(height)):
         dy, dx = flow[y, x]
-
         rx = max(0, min(x + int(dx), width - 1))
         ry = max(0, min(y + int(dy), height - 1))
         reconstruct[y, x] = current[ry, rx]
@@ -55,7 +54,7 @@ def findCutScene(files, mode=0):
             else:
                 cur = calculateHistogram(filename)
                 diff = np.linalg.norm(cur - prev)
-                if (diff - prevDiff) > THRESHOLD * prevDiff:
+                if abs(diff - prevDiff) > THRESHOLD * prevDiff:
                     cuts.append(i)
                     print("BINGO")
 
@@ -73,7 +72,7 @@ def findCutScene(files, mode=0):
                 prev = cv2.cvtColor(prev, cv2.COLOR_BGR2GRAY)
                 # Down-sampling increases efficienty
                 prev = misc.imresize(prev, DOWN_RATIO)
-                prevDistance = 0
+                prevDistance = float('inf')
             else:
                 cur = cv2.imread(filename)
                 cur = cv2.cvtColor(cur, cv2.COLOR_BGR2GRAY)
@@ -98,7 +97,11 @@ def plotCuts(cuts, files):
         im1 = Image.open(imageFile)
         # Drawing the text on the picture
         draw = ImageDraw.Draw(im1)
-        draw.text((0, 0), "Scene{}".format(cut), (255, 255, 0))
+        # HACK: Replace this with your own font
+        font_path = "/Users/Danny/Library/Fonts/Hack-Bold.ttf"
+        font_size = 30
+        font = ImageFont.truetype(font_path, font_size)
+        draw.text((0, 0), "Scene{}".format(cut), (255, 255, 0), font=font)
         print(imageFile)
         _ = ImageDraw.Draw(im1)
 
@@ -111,5 +114,5 @@ if __name__ == '__main__':
     files = [os.fsdecode(file) for file in files if os.fsdecode(file).split(".")[-1] == "jpg"]
     files = sorted(files, key=lambda x: (x.split('.')[0]))
     files = [os.path.join('./test', filename) for filename in files]
-    cuts = findCutScene(files)
+    cuts = findCutScene(files, mode=0)
     print(cuts)
