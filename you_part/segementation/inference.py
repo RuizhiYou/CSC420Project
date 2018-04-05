@@ -12,7 +12,7 @@ import shutil
 from model import FCN8s, PSPNet50, ENet, ICNet
 from color_image import *
 from image_combined import *
-
+ 
 
 save_dir = 'output'
 model_path = {'pspnet': os.path.join('model','pspnet50.npy'),
@@ -72,10 +72,12 @@ def segmentation(images, output, modelName, images_names):
         misc.imsave(os.path.join(output, images_names[i]), preds[0])
         i += 1
 
+
+
 def generate_vedio(colored_img_folder, saved_vedio, args):
-    if os.path.exists(colored_img_folder):
-        shutil.rmtree(colored_img_folder)
-    os.makedirs(colored_img_folder)
+    # if os.path.exists(colored_img_folder):
+    #     shutil.rmtree(colored_img_folder)
+    # os.makedirs(colored_img_folder)
     color_images(args.img_path, args.save_dir, colored_img_folder)
     combine_images(colored_img_folder, saved_vedio)
 

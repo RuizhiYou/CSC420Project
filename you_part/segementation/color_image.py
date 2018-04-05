@@ -20,6 +20,15 @@ def color_image(source_img_path, boundary_img_path, saved_path, saved_name):
     else:
         print ("shape are different! Skip this pair!")
 
+def combine_img(src_path, colored_path, saved_path, saved_name):
+    src1 = cv2.imread(src_path)
+    src2 = cv2.imread(colored_path)
+
+    alpha = 0.7
+    beta = 1.0 - alpha
+    cv2.addWeighted(src1, alpha, src2, beta, 0.0, src1);
+    cv2.imwrite(os.path.join(saved_path, saved_name), src1)
+
 def color_images(source_folder, boundary_folder, saved_path):
     print (source_folder)
     print (boundary_folder)
@@ -33,5 +42,5 @@ def color_images(source_folder, boundary_folder, saved_path):
         boundary_images.remove('.DS_Store')
     for i in range(min(len(source_images), len(boundary_images))):
         print ('processing {} image...'.format(i))
-        color_image(os.path.join(source_folder,source_images[i]), os.path.join(boundary_folder,boundary_images[i]), saved_path, source_images[i])
+        combine_img(os.path.join(source_folder,source_images[i]), os.path.join(boundary_folder,boundary_images[i]), saved_path, source_images[i])
 
