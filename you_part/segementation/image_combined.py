@@ -10,11 +10,13 @@ def combine_images(image_folder, saved_vedio):
     if '.DS_Store' in images:
         images.remove('.DS_Store')
     print (images)
-    img = cv2.imread(image_folder + images[0])
-    height , width , layers =  img.shape
+    print(image_folder)
+    print(images[0])
+    img = cv2.imread(os.path.join(image_folder,images[0]))
+    height, width, layers = img.shape
 
     if os.path.exists(saved_vedio):
-        print ("remove the orignal saved file")
+        print("remove the orignal saved file")
         os.remove(saved_vedio)
 
     video = cv2.VideoWriter(saved_vedio,-1,SPEED,(width,height))

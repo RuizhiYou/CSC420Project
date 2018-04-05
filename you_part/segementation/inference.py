@@ -14,14 +14,14 @@ from color_image import *
 from image_combined import *
 
 
-save_dir = './output/'
-model_path = {'pspnet': './model/pspnet50.npy',
-              'fcn': './model/fcn.npy',
+save_dir = 'output'
+model_path = {'pspnet': os.path.join('model','pspnet50.npy'),
+              'fcn': os.path.join('model','fcn.npy'),
               'enet': './model/cityscapes/enet.ckpt',
               'icnet': './model/cityscapes/icnet.npy'}
 # python3 inference.py --img-path '1.jpg' --model 'fcn'
-colored_img_folder = './colored_img/'
-saved_vedio = './saved_video/video.mp4'
+colored_img_folder = 'colored_img'
+saved_vedio = 'video.mp4'
 
 def get_arguments():
     parser = argparse.ArgumentParser(description="Reproduced PSPNet")
@@ -37,7 +37,7 @@ def get_arguments():
 
     return parser.parse_args()
 
-def segmentation(images, output, modelName):
+def segmentation(images, output, modelName, images_names):
 
     if modelName == 'pspnet':
         model = PSPNet50()
@@ -63,27 +63,29 @@ def segmentation(images, output, modelName):
     print ("model loaded successfully")
     print ("the type of the model: {}".format(type(model)))
 
-
+    i = 0
     for item in images:
         print ("processing image: {}...".format(item))
         model.read_input(item)
         preds = model.forward(sess)
         p = output + modelName + '_' + model.img_name, preds[0]
-        misc.imsave(os.path.join(output + (modelName + '_' + model.img_name)), preds[0])
+        misc.imsave(os.path.join(output, images_names[i]), preds[0])
+        i += 1
 
-def generate_vedio(colored_img_folder, saved_vedio):
+def generate_vedio(colored_img_folder, saved_vedio, args):
     if os.path.exists(colored_img_folder):
         shutil.rmtree(colored_img_folder)
     os.makedirs(colored_img_folder)
     color_images(args.img_path, args.save_dir, colored_img_folder)
-    # combine_images(colored_img_folder, saved_vedio)
+    combine_images(colored_img_folder, saved_vedio)
 
 if __name__ == '__main__':
     args = get_arguments()
     folder = args.img_path
     images = os.listdir(folder)
-    images = [os.path.join(folder, image) for image in images]
+    images_names = [image for image in images if image != ".DS_Store"]
+    images = [os.path.join(folder, image) for image in images_names]
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
-    segmentation(images, args.save_dir, args.model)
-    generate_vedio(colored_img_folder, saved_vedio)
+    segmentation(images, args.save_dir, args.model,images_names)
+    generate_vedio(colored_img_folder, saved_vedio, args)
