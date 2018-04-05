@@ -98,7 +98,7 @@ def plotCuts(cuts, files):
         # Drawing the text on the picture
         draw = ImageDraw.Draw(im1)
         # HACK: Replace this with your own font
-        font_path = "/Users/Danny/Library/Fonts/Hack-Bold.ttf"
+        font_path = "Hack-Bold.ttf"
         font_size = 30
         font = ImageFont.truetype(font_path, font_size)
         draw.text((0, 0), "Scene{}".format(cut), (255, 255, 0), font=font)
