@@ -2,7 +2,7 @@ import cv2
 import os
 
 SPEED = 24
-SPEED = 10
+# SPEED = 10
 
 def combine_images(image_folder, saved_vedio):
     images = os.listdir(image_folder)
@@ -24,7 +24,7 @@ def combine_images(image_folder, saved_vedio):
     for i in range(len(images)):
         print ("processing image: {}...".format(images[i]))
         # img = cv2.imread(image_folder + str(i) + '.jpg')
-        img = cv2.imread(image_folder + images[i])
+        img = cv2.imread(os.path.join(image_folder,images[i]))
         video.write(img)
 
 
