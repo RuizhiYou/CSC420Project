@@ -4,7 +4,7 @@ import os
 SPEED = 24
 # SPEED = 10
 
-def combine_images(image_folder, saved_vedio):
+def combine_images_to_video(image_folder, saved_vedio):
     images = os.listdir(image_folder)
     print ("image_folder: {}".format(image_folder))
     if '.DS_Store' in images:

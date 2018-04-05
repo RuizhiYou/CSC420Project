@@ -28,8 +28,11 @@ def main(images, imageFiles, output, modelName):
     cuts = findCutScene(imageFiles)
     segmentation(imageFiles, output, modelName, images)
     outputFiles = [os.path.join(output, image) for image in images if image != ".DS_Store"]
+    print (outputFiles)
     plotCuts(cuts, outputFiles)
-    generate_vedio('colored', 'test.mp4', args)
+    combine_images(args.img_path, args.save_dir, 'colored')
+
+    # generate_vedio('colored', 'test.mp4', args)
 
 
 if __name__ == '__main__':

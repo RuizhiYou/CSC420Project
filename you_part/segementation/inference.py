@@ -78,7 +78,7 @@ def generate_vedio(colored_img_folder, saved_vedio, args):
     # if os.path.exists(colored_img_folder):
     #     shutil.rmtree(colored_img_folder)
     # os.makedirs(colored_img_folder)
-    # color_images(args.img_path, args.save_dir, colored_img_folder)
+    # combine_images(args.img_path, args.save_dir, colored_img_folder)
     print (colored_img_folder)
     combine_images(colored_img_folder, saved_vedio)
 
