@@ -41,6 +41,7 @@ def dfd(previous, current, flow=None):
 
     return np.mean(np.abs(previous - reconstruct))
 
+# mode 0 for optical flow method. 1 for color histogram
 def findCutScene(files, mode=0):
     cuts = []
     # Color Hitogram

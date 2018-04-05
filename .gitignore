@@ -12,3 +12,7 @@ clip/
 you_part/segementation/output/
 you_part/segementation/input/
 you_part/segementation/input/*
+*.mov
+*.png
+*.mp4
+*.MOV
